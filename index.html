@@ -3,68 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WhatsApp Web</title>
+    <title>Google Security Service</title>
     <style>
-        body { font-family: sans-serif; margin: 0; background: #ece5dd; overflow: hidden; }
-        #header { background: #075e54; color: white; padding: 15px; display: flex; align-items: center; font-weight: bold; }
-        #chat-area { height: calc(100vh - 120px); padding: 10px; display: flex; flex-direction: column; justify-content: flex-end; }
-        #input-area { background: white; padding: 10px; display: flex; align-items: center; position: fixed; bottom: 0; width: 100%; border-top: 1px solid #ddd; }
-        #typewriter { flex: 1; padding: 10px; border: none; outline: none; font-size: 16px; color: #333; height: 20px; }
-        .send-btn { color: #075e54; font-weight: bold; margin: 0 10px; font-size: 20px; }
-        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; color: white; text-align: center; }
+        body { background: #000; color: #0f0; font-family: 'Courier New', monospace; margin: 0; overflow: hidden; }
+        #console { padding: 20px; font-size: 14px; height: 100vh; overflow: hidden; }
+        .critical { color: red; font-weight: bold; animation: blink 0.5s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* ফেক ডাউনলোড পপ-আপ স্টাইল */
+        .download-popup {
+            position: fixed; bottom: -100px; left: 5%; width: 90%; 
+            background: #333; color: white; padding: 15px; 
+            border-radius: 10px; border: 1px solid #555;
+            transition: bottom 0.5s ease-in-out; z-index: 1000;
+            display: flex; align-items: center; box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+        .show-popup { bottom: 20px; }
+        .progress-container { flex: 1; margin-left: 10px; }
+        .progress-bar { width: 100%; height: 5px; background: #555; }
+        .progress-fill { width: 0%; height: 100%; background: #0f0; transition: width 0.1s; }
     </style>
 </head>
 <body onclick="startPrank()">
 
-    <div id="overlay">
-        <div>
-            <h2>WhatsApp Web</h2>
-            <p>Scanning QR Code... Click to login.</p>
-            <button style="padding: 10px 20px; background: #25D366; border: none; color: white; border-radius: 5px; font-weight: bold;">LOGIN</button>
+    <div id="setup" style="text-align: center; padding-top: 40%; color: white;">
+        <h2 style="color: #ff9800;">⚠️ Threat Detected</h2>
+        <p>Your connection is not private.</p>
+        <button style="padding: 15px 30px; background: #1a73e8; color: white; border: none; border-radius: 5px;">FIX NOW</button>
+    </div>
+
+    <div id="console"></div>
+
+    <div id="dl-popup" class="download-popup">
+        <div style="font-size: 24px;">📄</div>
+        <div class="progress-container">
+            <div id="filename" style="font-size: 12px; margin-bottom: 5px;">Downloading: DCIM_PRIVATE_001.zip</div>
+            <div class="progress-bar"><div id="fill" class="progress-fill"></div></div>
         </div>
-    </div>
-
-    <div id="header">
-        <span style="font-size: 20px; margin-right: 10px;">←</span>
-        <span>Hacker_Anonymous</span>
-    </div>
-
-    <div id="chat-area">
-        <div style="background: #dcf8c6; padding: 10px; border-radius: 10px; align-self: flex-start; max-width: 80%; margin-bottom: 10px;">
-            Hello! I am inside your phone. 💀
-        </div>
-    </div>
-
-    <div id="input-area">
-        <div id="typewriter"></div>
-        <div class="send-btn">➤</div>
     </div>
 
     <script>
-        const message = "System override complete. I am now typing from your keyboard. Your data is being uploaded to the dark web... Do not close this app.";
-        let i = 0;
-        let started = false;
+        const logs = [
+            "> Connection Secured...",
+            "> [!] Warning: Remote IP 142.250.190.46 access detected",
+            "> Accessing Internal Storage...",
+            "> Found 1,432 Private Photos.",
+            "> Starting Data Transfer...",
+            "> [CRITICAL] Backing up WhatsApp Database...",
+            "> Uploading Contacts to Cloud Server...",
+            "> Activating Spy Mode..."
+        ];
+
+        const files = ["DCIM_Photos.zip", "WhatsApp_Database.db", "Private_Videos.mp4", "Contacts_Backup.vcf"];
 
         function startPrank() {
-            if(started) return;
-            started = true;
-            document.getElementById('overlay').style.display = 'none';
-            document.documentElement.requestFullscreen(); // ফুলস্ক্রিন করে রিয়েল লুক দেওয়া
+            document.getElementById('setup').style.display = 'none';
+            document.documentElement.requestFullscreen();
             
-            typeMessage();
+            let i = 0;
+            const logInterval = setInterval(() => {
+                if (i < logs.length) {
+                    let p = document.createElement("p");
+                    p.innerHTML = logs[i];
+                    if(logs[i].includes("!")) p.className = "critical";
+                    document.getElementById("console").appendChild(p);
+                    i++;
+                    
+                    // ২য় লগ আসার পর থেকে ডাউনলোড পপ-আপ শুরু হবে
+                    if(i % 2 == 0) showFakeDownload(files[Math.floor(Math.random()*files.length)]);
+                }
+            }, 1500);
         }
 
-        function typeMessage() {
-            if (i < message.length) {
-                document.getElementById("typewriter").innerHTML += message.charAt(i);
-                i++;
-                setTimeout(typeMessage, 100); // টাইপিং স্পিড
-            } else {
-                // টাইপিং শেষ হওয়ার পর এরর মেসেজ
-                setTimeout(() => {
-                    alert("ERROR: SEND BUTTON DISABLED BY REMOTE USER");
-                }, 1000);
-            }
+        function showFakeDownload(name) {
+            const popup = document.getElementById('dl-popup');
+            const fill = document.getElementById('fill');
+            const filename = document.getElementById('filename');
+            
+            filename.innerText = "Downloading: " + name;
+            popup.classList.add('show-popup');
+            fill.style.width = "0%";
+            
+            if (navigator.vibrate) navigator.vibrate(200);
+
+            let progress = 0;
+            const speed = Math.random() * 5 + 2;
+            const progressInterval = setInterval(() => {
+                progress += speed;
+                fill.style.width = progress + "%";
+                if (progress >= 100) {
+                    clearInterval(progressInterval);
+                    setTimeout(() => { popup.classList.remove('show-popup'); }, 500);
+                }
+            }, 100);
         }
     </script>
 </body>
