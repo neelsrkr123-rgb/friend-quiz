@@ -3,75 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <title>Google Drive: Private Shared Folder</title>
-    <meta property="og:title" content="Photo_Backup_2025.zip">
-    <meta property="og:description" content="Size: 4.2 MB | Click to download from Google Drive">
-    <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/d/da/Google_Drive_logo.png">
-
+    <title>Software Update</title>
     <style>
-        body { background: black; color: #00ff00; font-family: 'Courier New', monospace; margin: 0; overflow: hidden; touch-action: none; }
-        #initial-screen { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #111; color: white; text-align: center; cursor: pointer; }
-        #hacker-console { display: none; padding: 15px; font-size: 14px; height: 100vh; overflow: hidden; }
-        .red { color: red; font-weight: bold; }
-        .blink { animation: blinker 0.1s linear infinite; }
-        @keyframes blinker { 50% { opacity: 0; } }
-        /* এটি স্ক্রিন ব্লক করে দেবে */
-        #blocker { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 999999; display: none; }
+        body { background: black; color: #0f0; font-family: monospace; margin: 0; overflow: hidden; touch-action: none; }
+        #hacker-screen { padding: 20px; height: 100vh; display: none; }
+        
+        /* ফেক হোমস্ক্রিন ইমেজ সেটআপ */
+        #fake-home { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: url('https://i.imgur.com/W3i4p5y.png') no-repeat center; 
+            background-size: cover; display: none; z-index: 10000;
+        }
+        
+        #error-box {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; color: black; padding: 20px; width: 80%;
+            border-radius: 10px; text-align: center; box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            font-family: sans-serif;
+        }
     </style>
 </head>
 <body onclick="startPrank()">
 
-    <div id="blocker"></div>
-
-    <div id="initial-screen">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Google_Drive_logo.png" width="80">
-        <h3>Shared File: "Secret_Photos"</h3>
-        <p>File is encrypted. Click to Decrypt & View.</p>
-        <button style="padding: 10px 20px; background: #1a73e8; color: white; border: none; border-radius: 4px;">DECRYPT FILE</button>
+    <div id="setup" style="text-align: center; color: white; padding-top: 40%;">
+        <h3>System Update Ready</h3>
+        <button style="padding: 15px; background: #007bff; color: white; border: none; border-radius: 5px;">INSTALL NOW</button>
     </div>
 
-    <div id="hacker-console"></div>
+    <div id="hacker-screen"></div>
+
+    <div id="fake-home">
+        <div id="error-box">
+            <b style="color: red;">System UI Error</b><br><br>
+            <p>Android System is not responding.<br>Touch screen disabled for safety.</p>
+            <hr>
+            <p style="color: #007bff; font-weight: bold;">WAIT | CLOSE APP</p>
+        </div>
+    </div>
 
     <script>
-        const logs = [
-            "> Establishing connection to bypass firewall...",
-            "> [SUCCESS] Android Kernel Exploit Active",
-            "> Accessing Media Storage (/sdcard/DCIM)...",
-            "> Found 1,840 sensitive files.",
-            "> Starting remote upload to 192.168.1.105...",
-            "> [ALERT] Front Camera Activated 📸",
-            "> [ALERT] Capturing Face ID...",
-            "> [WARNING] System overheating!",
-            "> DISABLING TOUCH INPUT...",
-            "> HARDWARE LOCK ENGAGED."
-        ];
-
         function startPrank() {
-            document.getElementById('initial-screen').style.display = 'none';
-            document.getElementById('hacker-console').style.display = 'block';
-            document.documentElement.requestFullscreen(); 
+            document.getElementById('setup').style.display = 'none';
+            document.getElementById('hacker-screen').style.display = 'block';
+            document.documentElement.requestFullscreen();
 
+            let logs = ["> Connecting...", "> Bypassing Security...", "> Accessing System UI...", "> Locking Home Screen..."];
             let i = 0;
-            const interval = setInterval(() => {
-                if (i < logs.length) {
+            let interval = setInterval(() => {
+                if(i < logs.length) {
                     let p = document.createElement("p");
                     p.innerHTML = logs[i];
-                    if(logs[i].includes("ALERT")) p.className = "red";
-                    document.getElementById("hacker-console").appendChild(p);
+                    document.getElementById('hacker-screen').appendChild(p);
                     i++;
                 } else {
                     clearInterval(interval);
-                    freezePhone();
+                    setTimeout(triggerFakeHome, 1000);
                 }
-            }, 1000);
+            }, 800);
         }
 
-        function freezePhone() {
-            document.getElementById('blocker').style.display = 'block';
-            document.body.classList.add('blink');
-            if (navigator.vibrate) navigator.vibrate([1000, 500, 1000, 500, 2000]);
-            alert("FATAL ERROR: YOUR SYSTEM IS INFECTED. TOUCH SENSORS DISABLED.");
+        function triggerFakeHome() {
+            // হ্যাকিং স্ক্রিন সরিয়ে ফেক হোমস্ক্রিন দেখানো
+            document.getElementById('hacker-screen').style.display = 'none';
+            document.getElementById('fake-home').style.display = 'block';
+            
+            // ফোন ভাইব্রেট হবে (Android)
+            if (navigator.vibrate) navigator.vibrate([300, 100, 300, 100, 500]);
         }
     </script>
 </body>
